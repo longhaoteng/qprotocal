@@ -291,28 +291,25 @@ func Init(uin, password string) (*QQ, error) {
 	qq.UinLong = uinLong
 	qq.Password = password
 	qq.Md5Pwd = getMd5Value([]byte(qq.Password))
-	data1, err := hex.DecodeString(fmt.Sprintf("%x", qq.Uin))
+	qq.Md5Pwd2 = getMd5Value(byteJoins(qq.Md5Pwd, make([]byte, 4), big.NewInt(int64(qq.Uin)).Bytes()))
+
+	kSid, err := hex.DecodeString("93AC689396D57E5F9496B81536AAFE91")
 	if err != nil {
 		return nil, err
 	}
-	qq.Md5Pwd2 = getMd5Value(byteJoins(qq.Md5Pwd, make([]byte, 4), data1))
-	data2, err := hex.DecodeString("93AC689396D57E5F9496B81536AAFE91")
-	if err != nil {
-		return nil, err
-	}
-	qq.KSid = data2
+	qq.KSid = kSid
 	qq.Imei = []byte("866819027236657")
 	qq.ApkVer = []byte("5.8.0.157158")
-	data3, err := hex.DecodeString("957C3AAFBF6FAF1D2C2F19A5EA04E51C")
+	shareKey, err := hex.DecodeString("957C3AAFBF6FAF1D2C2F19A5EA04E51C")
 	if err != nil {
 		return nil, err
 	}
-	qq.ShareKey = data3
-	data4, err := hex.DecodeString("02244B79F2239755E73C73FF583D4EC5625C19BF8095446DE1")
+	qq.ShareKey = shareKey
+	pubKey, err := hex.DecodeString("02244B79F2239755E73C73FF583D4EC5625C19BF8095446DE1")
 	if err != nil {
 		return nil, err
 	}
-	qq.PubKey = data4
+	qq.PubKey = pubKey
 	qq.AppId = 537042771
 	qq.PcVer = []byte("\x1F\x41")
 	qq.OsType = []byte("android")
@@ -323,16 +320,16 @@ func Init(uin, password string) (*QQ, error) {
 	qq.ApkId = []byte("com.tencent.mobileqq")
 	qq.ApkSig = []byte("\xA6\xB7\x45\xBF\x24\xA2\xC2\x77\x52\x77\x16\xF6\xF3\x6E\xB6\x8D")
 	qq.Time = time.Now().UnixNano()
-	data5, err := getRandomHex(16)
+	tgtKey, err := getRandomHex(16)
 	if err != nil {
 		return nil, err
 	}
-	qq.TgtKey = data5
-	data6, err := getRandomHex(16)
+	qq.TgtKey = tgtKey
+	randKey, err := getRandomHex(16)
 	if err != nil {
 		return nil, err
 	}
-	qq.RandKey = data6
+	qq.RandKey = randKey
 
 	qq.RequestId = 10000
 	qq.PcSubCmd = 0
