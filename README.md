@@ -44,7 +44,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			if q.LoginState == 2 {
+			if q.LoginState != 1 {
 				break
 			}
 		}
