@@ -93,6 +93,7 @@ func (qq *QQ) recovery() ([]byte, error) {
 func recoveryHandle(qq *QQ, data []byte) error {
 	if len(data) == 0 {
 		qq.LastError = "返回包为空"
+		return nil
 	}
 
 	bin := unpack(qq, data)
